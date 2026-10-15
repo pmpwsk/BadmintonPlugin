@@ -15,7 +15,7 @@ public partial class BadmintonPlugin
                     Parsers.ConditionalIteration<AbstractElement>(
                         tour.Players.Length != 0,
                         tour.Players.Select(player => new ServerActionButton(
-                            new("bi bi-person-fill", player.Name),
+                            new(player.Ignored ? "bi bi-ban" : "bi bi-person-fill", player.Name),
                             _ => OpenPlayerDialog(tour, page, player)
                         )),
                         new Paragraph(Texts.NoPlayers)
@@ -70,6 +70,16 @@ public partial class BadmintonPlugin
             page,
             player.Name,
             [
+                player.Ignored
+                    ? new BigServerSubmitButton(
+                        Texts.Activate,
+                        Texts.ActivatePlayerDescription,
+                        _ => TogglePlayerState(tour, player, false)
+                    ) : new BigServerSubmitButton(
+                        Texts.Deactivate,
+                        Texts.DeactivatePlayerDescription,
+                        _ => TogglePlayerState(tour, player, true)
+                    ),
                 new BigServerSubmitButton(
                     Texts.Delete,
                     Texts.RemovePlayerDescription,
@@ -79,6 +89,15 @@ public partial class BadmintonPlugin
             ],
             _ => DialogBuilder.Back(page)
         );
+    
+    private async Task TogglePlayerState(BadmintonTournament tour, BadmintonPlayer player, bool ignored)
+    {
+        await using var t = Tournaments.StartModifying(ref tour);
+        
+        var transactionPlayer = tour.Players.FirstOrDefault(p => p == player);
+        if (transactionPlayer != null)
+            transactionPlayer.Ignored = ignored;
+    }
     
     private void OpenPlayerDeletionDialog(BadmintonTournament tour, Page page, BadmintonPlayer player)
         => DialogBuilder.Open(
@@ -108,7 +127,7 @@ public partial class BadmintonPlugin
     
     private async Task StartTournament(BadmintonTournament tour)
     {
-        if (tour.Players.Length < tour.TeamSize * 2)
+        if (tour.Players.Count(player => !player.Ignored) < tour.TeamSize * 2)
             throw new ForcedActionError(Texts.NotEnoughPlayers);
         
         await using var t = Tournaments.StartModifying(ref tour);

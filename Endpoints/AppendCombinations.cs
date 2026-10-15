@@ -34,8 +34,8 @@ public partial class BadmintonPlugin
                 new Subsection(
                     Texts.Combinations,
                     Parsers.ConditionalIteration<AbstractElement>(
-                        tour.Combinations.Count != 0,
-                        tour.Combinations
+                        tour.Combinations.Any(comb => CombinationIsVisible(tour, comb)),
+                        tour.Combinations.Where(comb => CombinationIsVisible(tour, comb))
                             .OrderBy(c => c.TeamA.Sum(p => tour.Players[p].Total) + c.TeamB.Sum(p => tour.Players[p].Total))
                             .Select(combination => new BigServerActionButton(
                                 $"{Texts.Combination} {number++}",
@@ -51,6 +51,10 @@ public partial class BadmintonPlugin
             ]
         ));
     }
+    
+    private static bool CombinationIsVisible(BadmintonTournament tour, BadmintonCombination combination)
+        => combination.TeamA.All(playerId => !tour.Players[playerId].Ignored)
+           && combination.TeamB.All(playerId => !tour.Players[playerId].Ignored);
 
     private static string FormatTeam(BadmintonTournament tour, int[] team)
         => string.Join(", ", team.Select(m => tour.Players[m].Name));

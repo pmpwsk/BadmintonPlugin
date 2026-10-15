@@ -105,8 +105,8 @@ public partial class BadmintonPlugin
         
         public static readonly CustomText NotEnoughPlayers = new(
             null,
-            "Not enough players have been added.",
-            "Es gibt nicht genug Spieler."
+            "Not enough players are active.",
+            "Es gibt nicht genug aktive Spieler."
         );
         
         public static readonly CustomText Combination = new(
@@ -188,7 +188,7 @@ public partial class BadmintonPlugin
         );
         
         public static readonly CustomText Delete = new(
-            "bi bi-trash-fill",
+            "bi bi-trash",
             "Delete",
             "Entfernen"
         );
@@ -197,6 +197,30 @@ public partial class BadmintonPlugin
             "bi bi-arrow-counterclockwise",
             "Undo",
             "Rückgängig"
+        );
+        
+        public static readonly CustomText Activate = new(
+            "bi bi-check-circle",
+            "Activate",
+            "Aktivieren"
+        );
+        
+        public static readonly CustomText Deactivate = new(
+            "bi bi-ban",
+            "Deactivate",
+            "Deaktivieren"
+        );
+        
+        public static readonly CustomText ActivatePlayerDescription = new(
+            null,
+            "Shows all combinations with this player again.",
+            "Zeigt alle Kombinationen mit diesem Spieler wieder."
+        );
+        
+        public static readonly CustomText DeactivatePlayerDescription = new(
+            null,
+            "Hides all combinations with this player.",
+            "Versteckt alle Kombinationen mit diesem Spieler."
         );
     }
     

@@ -7,6 +7,7 @@ namespace uwap.WebFramework.Plugins;
 /// </summary>
 public class BadmintonPlayer(
     string name,
+    bool ignored,
     int wins,
     int losses
 ) : FunctionalComparable<BadmintonPlayer> {
@@ -14,6 +15,11 @@ public class BadmintonPlayer(
     /// The player's display name.
     /// </summary>
     public readonly string Name = name;
+    
+    /// <summary>
+    /// Whether combinations with this player should be hidden.
+    /// </summary>
+    public bool Ignored = ignored;
     
     /// <summary>
     /// The number of matches the player won.
