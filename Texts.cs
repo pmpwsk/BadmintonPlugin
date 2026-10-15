@@ -91,6 +91,12 @@ public partial class BadmintonPlugin
             "Möchten Sie das Spiel abbrechen?"
         );
         
+        public static readonly CustomText ReallyGenerateCombinations = new(
+            null,
+            "Do you want to re-generate all combinations?",
+            "Möchten Sie alle Kombinationen neu generieren?"
+        );
+        
         public static readonly CustomText NoPlayers = new(
             null,
             "No players have been added yet.",

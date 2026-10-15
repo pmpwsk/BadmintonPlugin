@@ -28,7 +28,7 @@ public partial class BadmintonPlugin
                         ),
                         new ServerActionButton(
                             Texts.NewCombinations,
-                            _ => GenerateNewCombinations(tour)
+                            _ => OpenGenerateNewCombinationsDialog(tour, page)
                         )
                     ]
                 ),
@@ -66,6 +66,23 @@ public partial class BadmintonPlugin
         
         tour.ModifyingPlayers = true;
     }
+    
+    private void OpenGenerateNewCombinationsDialog(BadmintonTournament tour, Page page)
+        => DialogBuilder.Open(
+            page,
+            Texts.NewCombinations.ToString(),
+            [
+                new Paragraph(Texts.ReallyGenerateCombinations),
+                new Row(
+                    new SubmitButton(Texts.Continue),
+                    new ServerSubmitButton(
+                        Texts.Back,
+                        _ => DialogBuilder.Back(page)
+                    )
+                )
+            ],
+            _ => GenerateNewCombinations(tour)
+        );
     
     private async Task GenerateNewCombinations(BadmintonTournament tour)
     {
