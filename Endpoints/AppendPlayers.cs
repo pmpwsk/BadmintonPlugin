@@ -32,19 +32,19 @@ public partial class BadmintonPlugin
                         ) { Autofocus = true }.Save(out var nameInput),
                         new SubmitButton(Texts.Add)
                     ],
-                    _ => AddPlayerAction(tour, page, nameInput)
+                    _ => AddPlayerAction(tour, nameInput)
                 ),
                 new ServerForm(
                     Texts.Start,
                     [
                         new SubmitButton(Texts.Continue)
                     ],
-                    _ => StartTournamentAction(tour, page)
+                    _ => StartTournamentAction(tour)
                 )
             ]
         ));
     
-    private async Task AddPlayerAction(BadmintonTournament tour, Page page, TextBox nameInput)
+    private async Task AddPlayerAction(BadmintonTournament tour, TextBox nameInput)
     {
         if (nameInput.IsEmpty(out var name))
             throw new ForcedActionError(Texts.NameMissing);
@@ -91,7 +91,7 @@ public partial class BadmintonPlugin
         tour.Matches.Clear();
     }
     
-    private async Task StartTournamentAction(BadmintonTournament tour, Page page)
+    private async Task StartTournamentAction(BadmintonTournament tour)
     {
         if (tour.Players.Length < tour.TeamSize * 2)
             throw new ForcedActionError(Texts.NotEnoughPlayers);
