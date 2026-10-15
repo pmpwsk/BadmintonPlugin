@@ -15,8 +15,8 @@ public partial class BadmintonPlugin
                     Parsers.ConditionalIteration<AbstractElement>(
                         tour.Players.Length != 0,
                         tour.Players.Select(player => new ServerActionButton(
-                            new("bi bi-trash-fill", player.Name),
-                            _ => PlayerMenuAction(tour, page, player)
+                            new("bi bi-person-fill", player.Name),
+                            _ => OpenPlayerDialog(tour, page, player)
                         )),
                         new Paragraph(Texts.NoPlayers)
                     )
@@ -32,19 +32,19 @@ public partial class BadmintonPlugin
                         ) { Autofocus = true }.Save(out var nameInput),
                         new SubmitButton(Texts.Add)
                     ],
-                    _ => AddPlayerAction(tour, nameInput)
+                    _ => AddPlayer(tour, nameInput)
                 ),
                 new ServerForm(
                     Texts.Start,
                     [
                         new SubmitButton(Texts.Continue)
                     ],
-                    _ => StartTournamentAction(tour)
+                    _ => StartTournament(tour)
                 )
             ]
         ));
     
-    private async Task AddPlayerAction(BadmintonTournament tour, TextBox nameInput)
+    private async Task AddPlayer(BadmintonTournament tour, TextBox nameInput)
     {
         if (nameInput.IsEmpty(out var name))
             throw new ForcedActionError(Texts.NameMissing);
@@ -60,12 +60,27 @@ public partial class BadmintonPlugin
         }
         
         nameInput.SetValueForClient("");
-        tour.Players = [..tour.Players, new BadmintonPlayer(name, 0, 0)];
+        tour.Players = [..tour.Players, new BadmintonPlayer(name, false, 0, 0)];
         Array.Sort(tour.Players);
         GenerateCombinationsInTransaction(tour, true);
     }
     
-    private void PlayerMenuAction(BadmintonTournament tour, Page page, BadmintonPlayer player)
+    private void OpenPlayerDialog(BadmintonTournament tour, Page page, BadmintonPlayer player)
+        => DialogBuilder.Open(
+            page,
+            player.Name,
+            [
+                new BigServerSubmitButton(
+                    Texts.Delete,
+                    [ Texts.RemovePlayerDescription ],
+                    _ => OpenPlayerDeletionDialog(tour, page, player)
+                ),
+                new SubmitButton(Texts.Back)
+            ],
+            _ => DialogBuilder.Back(page)
+        );
+    
+    private void OpenPlayerDeletionDialog(BadmintonTournament tour, Page page, BadmintonPlayer player)
         => DialogBuilder.Open(
             page,
             player.Name,
@@ -74,15 +89,15 @@ public partial class BadmintonPlugin
                 new Row(
                     new SubmitButton(Texts.Continue),
                     new ServerSubmitButton(
-                        Texts.Cancel,
-                        _ => DialogBuilder.Close(page)
+                        Texts.Back,
+                        _ => DialogBuilder.Back(page)
                     )
                 )
             ],
-            _ => RemovePlayerAction(tour, player)
+            _ => DeletePlayer(tour, player)
         );
     
-    private async Task RemovePlayerAction(BadmintonTournament tour, BadmintonPlayer player)
+    private async Task DeletePlayer(BadmintonTournament tour, BadmintonPlayer player)
     {
         await using var t = Tournaments.StartModifying(ref tour);
         
@@ -91,7 +106,7 @@ public partial class BadmintonPlugin
         tour.Matches.Clear();
     }
     
-    private async Task StartTournamentAction(BadmintonTournament tour)
+    private async Task StartTournament(BadmintonTournament tour)
     {
         if (tour.Players.Length < tour.TeamSize * 2)
             throw new ForcedActionError(Texts.NotEnoughPlayers);

@@ -23,11 +23,11 @@ public partial class BadmintonPlugin
                     [
                         new ServerActionButton(
                             Texts.Players,
-                            _ => ModifyPlayersAction(tour)
+                            _ => GoToPlayers(tour)
                         ),
                         new ServerActionButton(
                             Texts.NewCombinations,
-                            _ => NewCombinationsAction(tour)
+                            _ => GenerateNewCombinations(tour)
                         )
                     ]
                 ),
@@ -43,7 +43,7 @@ public partial class BadmintonPlugin
                                     "A: " + FormatTeam(tour, combination.TeamA),
                                     "B: " + FormatTeam(tour, combination.TeamB)
                                 ],
-                                _ => SelectMatchAction(tour, combination)
+                                _ => ChooseMatch(tour, combination)
                             )),
                         new Paragraph(Texts.NoCombinations)
                     )
@@ -55,14 +55,14 @@ public partial class BadmintonPlugin
     private static string FormatTeam(BadmintonTournament tour, int[] team)
         => string.Join(", ", team.Select(m => tour.Players[m].Name));
     
-    private async Task ModifyPlayersAction(BadmintonTournament tour)
+    private async Task GoToPlayers(BadmintonTournament tour)
     {
         await using var t = Tournaments.StartModifying(ref tour);
         
         tour.ModifyingPlayers = true;
     }
     
-    private async Task NewCombinationsAction(BadmintonTournament tour)
+    private async Task GenerateNewCombinations(BadmintonTournament tour)
     {
         await using var t = Tournaments.StartModifying(ref tour);
         
@@ -70,7 +70,7 @@ public partial class BadmintonPlugin
         GenerateCombinationsInTransaction(tour, false);
     }
     
-    private async Task SelectMatchAction(BadmintonTournament tour, BadmintonCombination combination)
+    private async Task ChooseMatch(BadmintonTournament tour, BadmintonCombination combination)
     {
         await using var t = Tournaments.StartModifying(ref tour);
         

@@ -73,6 +73,12 @@ public partial class BadmintonPlugin
             "Dieser Spieler existiert bereits."
         );
         
+        public static readonly CustomText RemovePlayerDescription = new(
+            null,
+            "Deletes all combinations with this player.",
+            "Lösche alle Kombinationen mit dem Spieler."
+        );
+        
         public static readonly CustomText ReallyRemovePlayer = new(
             null,
             "Do you want to remove this player?",
@@ -163,10 +169,10 @@ public partial class BadmintonPlugin
             "Weiter"
         );
         
-        public static readonly CustomText Cancel = new(
+        public static readonly CustomText Back = new(
             null,
-            "Cancel",
-            "Abbrechen"
+            "Back",
+            "Zurück"
         );
         
         public static readonly CustomText CancelWithIcon = new(
@@ -179,6 +185,12 @@ public partial class BadmintonPlugin
             "bi bi-arrow-return-right",
             "Add",
             "Hinzufügen"
+        );
+        
+        public static readonly CustomText Delete = new(
+            "bi bi-trash-fill",
+            "Delete",
+            "Entfernen"
         );
         
         public static readonly CustomText Undo = new(

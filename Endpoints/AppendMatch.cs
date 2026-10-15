@@ -19,11 +19,11 @@ public partial class BadmintonPlugin
                         new Row(
                             new ServerActionButton(
                                 Texts.Undo,
-                                _ => UndoAction(tour)
+                                _ => UndoLastPoint(tour)
                             ),
                             new ServerActionButton(
                                 Texts.CancelWithIcon,
-                                _ => CancelQuestionAction(tour, page)
+                                _ => OpenCancelMatchDialog(tour, page)
                             )
                         )
                     ]
@@ -77,7 +77,7 @@ public partial class BadmintonPlugin
         return new(
             $"Team {(isB ? "B" : "A")} ({points})",
             PlayerLines(tour, isB, points, wonLast, reversed, team),
-            _ => AddPointAction(tour, page, isB)
+            _ => AddPoint(tour, page, isB)
         )
         {
             Style = "flex-basis: 0; flex-grow: 1; flex-shrink: 1; display: grid;",
@@ -115,7 +115,7 @@ public partial class BadmintonPlugin
         return turn + player;
     }
     
-    private async Task AddPointAction(BadmintonTournament tour, Page page, bool isB)
+    private async Task AddPoint(BadmintonTournament tour, Page page, bool isB)
     {
         var match = tour.Matches.Last();
         match.RoundsWonByB.Add(isB);
@@ -139,7 +139,7 @@ public partial class BadmintonPlugin
                         )
                     )
                 ],
-                _ => FinishMatchAction(tour, isB)
+                _ => FinishMatch(tour, isB)
             );
         }
         else
@@ -151,7 +151,7 @@ public partial class BadmintonPlugin
         }
     }
     
-    private async Task UndoAction(BadmintonTournament tour)
+    private async Task UndoLastPoint(BadmintonTournament tour)
     {
         await using var t = Tournaments.StartModifying(ref tour);
         
@@ -162,24 +162,24 @@ public partial class BadmintonPlugin
             match.RoundsWonByB.RemoveAt(match.RoundsWonByB.Count - 1);
     }
     
-    private void CancelQuestionAction(BadmintonTournament tour, Page page)
+    private void OpenCancelMatchDialog(BadmintonTournament tour, Page page)
         => DialogBuilder.Open(
             page,
-            Texts.Cancel,
+            Texts.Back,
             [
                 new Paragraph(Texts.ReallyCancelMatch),
                 new Row(
                     new SubmitButton(Texts.Continue),
                     new ServerSubmitButton(
-                        Texts.Cancel,
-                        _ => DialogBuilder.Close(page)
+                        Texts.Back,
+                        _ => DialogBuilder.Back(page)
                     )
                 )
             ],
-            _ => CancelAction(tour)
+            _ => CancelMatch(tour)
         );
     
-    private async Task CancelAction(BadmintonTournament tour)
+    private async Task CancelMatch(BadmintonTournament tour)
     {
         await using var t = Tournaments.StartModifying(ref tour);
     
@@ -188,7 +188,7 @@ public partial class BadmintonPlugin
         tour.Matches.RemoveAt(tour.Matches.Count - 1);
     }
     
-    private async Task FinishMatchAction(BadmintonTournament tour, bool isB)
+    private async Task FinishMatch(BadmintonTournament tour, bool isB)
     {
         await using var t = Tournaments.StartModifying(ref tour);
     
