@@ -222,6 +222,18 @@ public partial class BadmintonPlugin
             "Hides all combinations with this player.",
             "Versteckt alle Kombinationen mit diesem Spieler."
         );
+        
+        public static readonly CustomText Rename = new(
+            "bi bi-tag",
+            "Rename",
+            "Umbenennen"
+        );
+        
+        public static readonly CustomText RenamePlayerDescription = new(
+            null,
+            "Changes the player's name.",
+            "Gibt dem Spieler einen neuen Namen."
+        );
     }
     
     public class CustomText(string? icon, string english, string german)

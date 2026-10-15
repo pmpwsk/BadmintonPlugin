@@ -14,7 +14,7 @@ public class BadmintonPlayer(
     /// <summary>
     /// The player's display name.
     /// </summary>
-    public readonly string Name = name;
+    public string Name = name;
     
     /// <summary>
     /// Whether combinations with this player should be hidden.

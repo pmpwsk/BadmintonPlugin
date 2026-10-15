@@ -14,7 +14,7 @@ public partial class BadmintonPlugin
                     Texts.Players,
                     Parsers.ConditionalIteration<AbstractElement>(
                         tour.Players.Length != 0,
-                        tour.Players.Select(player => new ServerActionButton(
+                        tour.Players.OrderBy(player => player.Name).Select(player => new ServerActionButton(
                             new(player.Ignored ? "bi bi-ban" : "bi bi-person-fill", player.Name),
                             _ => OpenPlayerDialog(tour, page, player)
                         )),
@@ -49,14 +49,14 @@ public partial class BadmintonPlugin
         if (nameInput.IsEmpty(out var name))
             throw new ForcedActionError(Texts.NameMissing);
         
-        name = string.Join(' ', name.Split(' ').Select(n => n[..1].ToUpper() + n[1..].ToLower()));
+        name = NormalizeName(name);
 
         await using var t = Tournaments.StartModifying(ref tour);
         
         if (tour.Players.Any(p => p.Name == name))
         {
             t.RequestCancellation();
-            throw new ForcedActionError(Texts.NameMissing);
+            throw new ForcedActionError(Texts.NameExists);
         }
         
         nameInput.SetValueForClient("");
@@ -81,6 +81,11 @@ public partial class BadmintonPlugin
                         _ => TogglePlayerState(tour, player, true)
                     ),
                 new BigServerSubmitButton(
+                    Texts.Rename,
+                    Texts.RenamePlayerDescription,
+                    _ => OpenPlayerRenameDialog(tour, page, player)
+                ),
+                new BigServerSubmitButton(
                     Texts.Delete,
                     Texts.RemovePlayerDescription,
                     _ => OpenPlayerDeletionDialog(tour, page, player)
@@ -97,6 +102,53 @@ public partial class BadmintonPlugin
         var transactionPlayer = tour.Players.FirstOrDefault(p => p == player);
         if (transactionPlayer != null)
             transactionPlayer.Ignored = ignored;
+    }
+    
+    private void OpenPlayerRenameDialog(BadmintonTournament tour, Page page, BadmintonPlayer player)
+        => DialogBuilder.Open(
+            page,
+            player.Name,
+            [
+                new TextBox(
+                    "player-name",
+                    Texts.Name + "...",
+                    player.Name,
+                    TextBoxRole.Normal
+                    ) { Autofocus = true }
+                    .Save(out var nameInput),
+                new Row(
+                    new SubmitButton(Texts.Continue),
+                    new ServerSubmitButton(
+                        Texts.Back,
+                        _ => DialogBuilder.Back(page)
+                    )
+                )
+            ],
+            _ => RenamePlayer(tour, player, nameInput)
+        );
+    
+    private async Task RenamePlayer(BadmintonTournament tour, BadmintonPlayer player, TextBox nameInput)
+    {
+        if (nameInput.IsEmpty(out var name))
+            throw new ForcedActionError(Texts.NameMissing);
+        
+        name = NormalizeName(name);
+        
+        if (player.Name == name)
+            return;
+
+        await using var t = Tournaments.StartModifying(ref tour);
+        
+        if (tour.Players.Any(p => p.Name == name))
+        {
+            t.RequestCancellation();
+            throw new ForcedActionError(Texts.NameExists);
+        }
+        
+        nameInput.SetValueForClient("");
+        var transactionPlayer = tour.Players.FirstOrDefault(p => p == player);
+        if (transactionPlayer != null)
+            transactionPlayer.Name = name;
     }
     
     private void OpenPlayerDeletionDialog(BadmintonTournament tour, Page page, BadmintonPlayer player)
@@ -142,4 +194,7 @@ public partial class BadmintonPlugin
         Random.Shared.Shuffle(combinations);
         tour.Combinations = [..combinations];
     }
+    
+    private static string NormalizeName(string name)
+        => string.Join(' ', name.Split(' ').Select(n => n[..1].ToUpper() + n[1..].ToLower()));
 }
