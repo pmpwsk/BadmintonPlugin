@@ -252,6 +252,24 @@ public partial class BadmintonPlugin
             "No points were scored yet.",
             "Es wurden noch keine Punkte eingetragen."
         );
+        
+        public static readonly CustomText InvertA = new(
+            "bi bi-arrow-down-up",
+            "Invert team A",
+            "Team A tauschen"
+        );
+        
+        public static readonly CustomText InvertB = new(
+            "bi bi-arrow-down-up",
+            "Invert team B",
+            "Team B tauschen"
+        );
+        
+        public static readonly CustomText InvertDescription = new(
+            null,
+            "Corrects the positions in the team.",
+            "Korrigiert die Positionen im Team."
+        );
     }
     
     public class CustomText(string? icon, string english, string german)

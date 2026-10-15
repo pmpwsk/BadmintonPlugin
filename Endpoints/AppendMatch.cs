@@ -42,12 +42,30 @@ public partial class BadmintonPlugin
                     Texts.CancelDescription,
                     _ => OpenCancelMatchDialog(tour, page)
                 ),
+                ..InvertButtons(tour),
                 new SubmitButton(Texts.Back)
             ],
             _ => DialogBuilder.Back(page)
         );
     
-    private bool WinnerIsBool(BadmintonTournament tour, bool isB)
+    private IEnumerable<BigServerSubmitButton> InvertButtons(BadmintonTournament tour)
+    {
+        if (tour.TeamSize > 1)
+        {
+            yield return new BigServerSubmitButton(
+                Texts.InvertA,
+                Texts.InvertDescription,
+                _ => InvertTeam(tour, false)
+            );
+            yield return new BigServerSubmitButton(
+                Texts.InvertB,
+                Texts.InvertDescription,
+                _ => InvertTeam(tour, true)
+            );
+        }
+    }
+    
+    private static bool WinnerIsBool(BadmintonTournament tour, bool isB)
     {
         var match = tour.Matches.Last();
         var points = match.RoundsWonByB.Count(r => r == isB);
@@ -100,7 +118,7 @@ public partial class BadmintonPlugin
         };
     }
     
-    private IEnumerable<string> PlayerLines(BadmintonTournament tour, bool isB, int points, bool wonLast, bool reversed, int[] team)
+    private static IEnumerable<string> PlayerLines(BadmintonTournament tour, bool isB, int points, bool wonLast, bool reversed, int[] team)
     {
         var left = PlayerLine(tour, isB, points, wonLast, reversed, team);
         var right = PlayerLine(tour, !isB, points, wonLast, reversed, team);
@@ -116,7 +134,7 @@ public partial class BadmintonPlugin
                 return [left, right];
     }
     
-    private string? PlayerLine(BadmintonTournament tour, bool isRight, int points, bool wonLast, bool reversed, int[] team)
+    private static string? PlayerLine(BadmintonTournament tour, bool isRight, int points, bool wonLast, bool reversed, int[] team)
     {
         string player;
         if (team.Length != 1)
@@ -204,6 +222,17 @@ public partial class BadmintonPlugin
         var match = tour.Matches.Last();
         tour.Combinations.Add(match.Combination);
         tour.Matches.RemoveAt(tour.Matches.Count - 1);
+    }
+    
+    private async Task InvertTeam(BadmintonTournament tour, bool isB)
+    {
+        await using var t = Tournaments.StartModifying(ref tour);
+        
+        var match = tour.Matches.Last();
+        if (isB)
+            match.InvertB = !match.InvertB;
+        else
+            match.InvertA = !match.InvertA;
     }
     
     private async Task FinishMatch(BadmintonTournament tour, bool isB)
