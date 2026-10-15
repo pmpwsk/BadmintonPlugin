@@ -80,6 +80,6 @@ public partial class BadmintonPlugin
         await using var t = Tournaments.StartModifying(ref tour);
         
         tour.Combinations.Remove(combination);
-        tour.Matches.Add(new(combination, Random.Shared.Next(2) == 0, [], false));
+        tour.Matches.Add(new(combination, Random.Shared.Next(2) == 0, [], false, false, false));
     }
 }

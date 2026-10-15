@@ -1,3 +1,4 @@
+using uwap.WebFramework.Responses.Actions;
 using uwap.WebFramework.Responses.DefaultUI;
 
 namespace uwap.WebFramework.Plugins;
@@ -16,21 +17,35 @@ public partial class BadmintonPlugin
                             MatchSideButton(tour, page, false),
                             MatchSideButton(tour, page, true)
                         ) { Style = "width: min(25rem, 100%);"},
-                        new Row(
-                            new ServerActionButton(
-                                Texts.Undo,
-                                _ => UndoLastPoint(tour)
-                            ),
-                            new ServerActionButton(
-                                Texts.CancelWithIcon,
-                                _ => OpenCancelMatchDialog(tour, page)
-                            )
+                        new ServerActionButton(
+                            Texts.Actions,
+                            _ => OpenMatchDialog(tour, page)
                         )
                     ]
                 )
             ]
         ));
     }
+    
+    private void OpenMatchDialog(BadmintonTournament tour, Page page)
+        => DialogBuilder.Open(
+            page,
+            Texts.Match.ToString(),
+            [
+                new BigServerSubmitButton(
+                    Texts.Undo,
+                    Texts.UndoDescription,
+                    _ => UndoLastPoint(tour)
+                ),
+                new BigServerSubmitButton(
+                    Texts.Cancel,
+                    Texts.CancelDescription,
+                    _ => OpenCancelMatchDialog(tour, page)
+                ),
+                new SubmitButton(Texts.Back)
+            ],
+            _ => DialogBuilder.Back(page)
+        );
     
     private bool WinnerIsBool(BadmintonTournament tour, bool isB)
     {
@@ -44,7 +59,7 @@ public partial class BadmintonPlugin
     {
         var match = tour.Matches.Last();
         
-        bool reversed = false;
+        bool reversed = isB ? match.InvertB : match.InvertA;
         if (tour.TeamSize > 1)
         {
             bool lastFailed = match.FirstIsB != isB;
@@ -153,6 +168,9 @@ public partial class BadmintonPlugin
     
     private async Task UndoLastPoint(BadmintonTournament tour)
     {
+        if (tour.Matches.Last().RoundsWonByB.Count == 0)
+            throw new ForcedActionError(Texts.NoPointsYet);
+        
         await using var t = Tournaments.StartModifying(ref tour);
         
         var match = tour.Matches.Last();
@@ -165,7 +183,7 @@ public partial class BadmintonPlugin
     private void OpenCancelMatchDialog(BadmintonTournament tour, Page page)
         => DialogBuilder.Open(
             page,
-            Texts.Back,
+            Texts.Match.ToString(),
             [
                 new Paragraph(Texts.ReallyCancelMatch),
                 new Row(

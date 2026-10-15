@@ -7,7 +7,9 @@ public class BadmintonMatch(
     BadmintonCombination combination,
     bool firstIsB,
     List<bool> roundsWonByB,
-    bool finished
+    bool finished,
+    bool invertA,
+    bool invertB
 ) {
     /// <summary>
     /// The player combination for this match.
@@ -28,4 +30,14 @@ public class BadmintonMatch(
     /// Whether the match has been confirmed as finished.
     /// </summary>
     public bool Finished = finished;
+    
+    /// <summary>
+    /// Whether team A should switch sides.
+    /// </summary>
+    public bool InvertA = invertA;
+    
+    /// <summary>
+    /// Whether team A should switch sides.
+    /// </summary>
+    public bool InvertB = invertB;
 }

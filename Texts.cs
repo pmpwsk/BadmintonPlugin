@@ -175,10 +175,16 @@ public partial class BadmintonPlugin
             "Zurück"
         );
         
-        public static readonly CustomText CancelWithIcon = new(
+        public static readonly CustomText Cancel = new(
             "bi bi-x-circle",
             "Cancel",
             "Abbrechen"
+        );
+        
+        public static readonly CustomText CancelDescription = new(
+            null,
+            "Puts the combination back on the list.",
+            "Setzt die Kombination zurück in die Liste."
         );
         
         public static readonly CustomText Add = new(
@@ -197,6 +203,12 @@ public partial class BadmintonPlugin
             "bi bi-arrow-counterclockwise",
             "Undo",
             "Rückgängig"
+        );
+        
+        public static readonly CustomText UndoDescription = new(
+            null,
+            "Reverses the last point.",
+            "Entfernt den letzten Punkt."
         );
         
         public static readonly CustomText Activate = new(
@@ -233,6 +245,12 @@ public partial class BadmintonPlugin
             null,
             "Changes the player's name.",
             "Gibt dem Spieler einen neuen Namen."
+        );
+        
+        public static readonly CustomText NoPointsYet = new(
+            null,
+            "No points were scored yet.",
+            "Es wurden noch keine Punkte eingetragen."
         );
     }
     
