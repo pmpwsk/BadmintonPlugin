@@ -72,7 +72,7 @@ public partial class BadmintonPlugin
             [
                 new BigServerSubmitButton(
                     Texts.Delete,
-                    [ Texts.RemovePlayerDescription ],
+                    Texts.RemovePlayerDescription,
                     _ => OpenPlayerDeletionDialog(tour, page, player)
                 ),
                 new SubmitButton(Texts.Back)
