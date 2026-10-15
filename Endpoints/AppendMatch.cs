@@ -17,9 +17,15 @@ public partial class BadmintonPlugin
                             MatchSideButton(tour, page, false),
                             MatchSideButton(tour, page, true)
                         ) { Style = "width: min(25rem, 100%);"},
-                        new ServerActionButton(
-                            Texts.Actions,
-                            _ => OpenMatchDialog(tour, page)
+                        new Row(
+                            new ServerActionButton(
+                                Texts.Actions,
+                                _ => OpenMatchDialog(tour, page)
+                            ),
+                            new LinkButton(
+                                Texts.Results,
+                                $"results?id={tour.Id}"
+                            )
                         )
                     ]
                 )

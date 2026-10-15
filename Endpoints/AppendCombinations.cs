@@ -12,19 +12,15 @@ public partial class BadmintonPlugin
             Texts.Badminton,
             [
                 new Subsection(
-                    Texts.Results,
-                    tour.Players
-                        .OrderByDescending(player => player.Ratio)
-                        .ThenBy(player => player.Name)
-                        .Select(player => new Paragraph($"{player.Name}: {player.Wins}/{player.Wins + player.Losses} ({Math.Round(player.Ratio * 100, 1, MidpointRounding.AwayFromZero)}%)")
-                    )
-                ),
-                new Subsection(
-                    Texts.Actions,
+                    null,
                     [
                         new ServerActionButton(
                             Texts.Players,
                             _ => GoToPlayers(tour)
+                        ),
+                        new LinkButton(
+                            Texts.Results,
+                            $"results?id={tour.Id}"
                         ),
                         new ServerActionButton(
                             Texts.NewCombinations,
