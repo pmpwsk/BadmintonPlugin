@@ -46,9 +46,19 @@ public partial class BadmintonPlugin
                 new BigServerSubmitButton(
                     Texts.Cancel,
                     Texts.CancelDescription,
-                    _ => OpenCancelMatchDialog(tour, page)
+                    _ => CancelMatchDialog(tour, page)
                 ),
                 ..InvertButtons(tour),
+                new BigServerSubmitButton(
+                    Texts.FastWinA,
+                    Texts.FastWinDescription,
+                    _ => FinishMatchDialog(tour, page, false, true)
+                ),
+                new BigServerSubmitButton(
+                    Texts.FastWinB,
+                    Texts.FastWinDescription,
+                    _ => FinishMatchDialog(tour, page, true, true)
+                ),
                 new SubmitButton(Texts.Back)
             ],
             _ => DialogBuilder.Back(page)
@@ -161,25 +171,7 @@ public partial class BadmintonPlugin
         
         if (WinnerIsBool(tour, isB))
         {
-            DialogBuilder.Open(
-                page,
-                Texts.MatchOver,
-                [
-                    new Paragraph($"{Texts.Winners}: {FormatTeam(tour, isB ? tour.Matches.Last().Combination.TeamB : tour.Matches.Last().Combination.TeamA)}"),
-                    new Row(
-                        new SubmitButton(Texts.Continue),
-                        new ServerSubmitButton(
-                            Texts.Undo,
-                            _ =>
-                            {
-                                match.RoundsWonByB.RemoveAt(match.RoundsWonByB.Count - 1);
-                                DialogBuilder.Close(page);
-                            }
-                        )
-                    )
-                ],
-                _ => FinishMatch(tour, isB)
-            );
+            FinishMatchDialog(tour, page, isB, false);
         }
         else
         {
@@ -204,7 +196,7 @@ public partial class BadmintonPlugin
             match.RoundsWonByB.RemoveAt(match.RoundsWonByB.Count - 1);
     }
     
-    private void OpenCancelMatchDialog(BadmintonTournament tour, Page page)
+    private void CancelMatchDialog(BadmintonTournament tour, Page page)
         => DialogBuilder.Open(
             page,
             Texts.Match.ToString(),
@@ -241,12 +233,39 @@ public partial class BadmintonPlugin
             match.InvertA = !match.InvertA;
     }
     
-    private async Task FinishMatch(BadmintonTournament tour, bool isB)
+    private void FinishMatchDialog(BadmintonTournament tour, Page page, bool isB, bool synthetic)
+        => DialogBuilder.Open(
+            page,
+            Texts.MatchOver,
+            [
+                new Paragraph($"{Texts.Winners}: {FormatTeam(tour, isB ? tour.Matches.Last().Combination.TeamB : tour.Matches.Last().Combination.TeamA)}"),
+                new Row(
+                    new SubmitButton(Texts.Continue),
+                    synthetic
+                        ? new ServerSubmitButton(
+                            Texts.Back,
+                            _ => DialogBuilder.Back(page)
+                        ) : new ServerSubmitButton(
+                            Texts.Undo,
+                            _ =>
+                            {
+                                var match = tour.Matches.Last();
+                                match.RoundsWonByB.RemoveAt(match.RoundsWonByB.Count - 1);
+                                DialogBuilder.Close(page);
+                            }
+                        )
+                )
+            ],
+            _ => FinishMatch(tour, isB, synthetic)
+        );
+    
+    private async Task FinishMatch(BadmintonTournament tour, bool isB, bool synthetic)
     {
         await using var t = Tournaments.StartModifying(ref tour);
     
         var match = tour.Matches.Last();
-        match.RoundsWonByB.Add(isB);
+        if (!synthetic)
+            match.RoundsWonByB.Add(isB);
         match.Finished = true;
         int[] winners;
         int[] losers;

@@ -276,6 +276,24 @@ public partial class BadmintonPlugin
             "Corrects the positions in the team.",
             "Korrigiert die Positionen im Team."
         );
+        
+        public static readonly CustomText FastWinA = new(
+            "bi bi-flag",
+            "Team A won",
+            "Team A hat gewonnen"
+        );
+        
+        public static readonly CustomText FastWinB = new(
+            "bi bi-flag",
+            "Team B won",
+            "Team B hat gewonnen"
+        );
+        
+        public static readonly CustomText FastWinDescription = new(
+            null,
+            "Marks the match as won without exact points.",
+            "Markiert das Spiel ohne genaue Punkte als gewonnen."
+        );
     }
     
     public class CustomText(string? icon, string english, string german)
