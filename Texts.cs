@@ -14,7 +14,7 @@ public partial class BadmintonPlugin
         );
         
         public static readonly CustomText NewTournament = new(
-            "bi bi-calendar-plus-fill",
+            "bi bi-calendar-plus",
             "New tournament",
             "Neues Turnier"
         );
@@ -76,7 +76,7 @@ public partial class BadmintonPlugin
         public static readonly CustomText RemovePlayerDescription = new(
             null,
             "Deletes all combinations with this player.",
-            "Lösche alle Kombinationen mit dem Spieler."
+            "Löscht alle Kombinationen mit dem Spieler."
         );
         
         public static readonly CustomText ReallyRemovePlayer = new(
@@ -116,19 +116,19 @@ public partial class BadmintonPlugin
         );
         
         public static readonly CustomText Combination = new(
-            "bi bi-calendar-event-fill",
+            "bi bi-calendar-event",
             "Combination",
             "Kombination"
         );
         
         public static readonly CustomText Combinations = new(
-            "bi bi-calendar-week-fill",
+            "bi bi-calendar-week",
             "Combinations",
             "Kombinationen"
         );
         
         public static readonly CustomText Match = new(
-            "bi bi-calendar-event-fill",
+            "bi bi-calendar-event",
             "Match",
             "Spiel"
         );
@@ -140,13 +140,13 @@ public partial class BadmintonPlugin
         );
         
         public static readonly CustomText Start = new(
-            "bi bi-flag-fill",
+            "bi bi-flag",
             "Start",
             "Beginn"
         );
         
         public static readonly CustomText Actions = new(
-            "bi bi-hand-index-thumb-fill",
+            "bi bi-hand-index-thumb",
             "Actions",
             "Aktionen"
         );
@@ -232,13 +232,13 @@ public partial class BadmintonPlugin
         public static readonly CustomText ActivatePlayerDescription = new(
             null,
             "Shows all combinations with this player again.",
-            "Zeigt alle Kombinationen mit diesem Spieler wieder."
+            "Zeigt alle Kombinationen mit dem Spieler wieder an."
         );
         
         public static readonly CustomText DeactivatePlayerDescription = new(
             null,
             "Hides all combinations with this player.",
-            "Versteckt alle Kombinationen mit diesem Spieler."
+            "Versteckt alle Kombinationen mit dem Spieler."
         );
         
         public static readonly CustomText Rename = new(
