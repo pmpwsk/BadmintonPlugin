@@ -1,3 +1,4 @@
+using uwap.WebFramework.Localization;
 using uwap.WebFramework.Responses.DefaultUI;
 
 namespace uwap.WebFramework.Plugins;
@@ -28,7 +29,7 @@ public partial class BadmintonPlugin
         return page;
     }
     
-    private ServerActionButton NewTournamentButton(Page page, CustomText text, int teamSize, int rounds)
+    private ServerActionButton NewTournamentButton(Page page, Translation text, int teamSize, int rounds)
         => new(
             text,
             async _ =>
