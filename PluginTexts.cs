@@ -7,7 +7,6 @@ public partial class BadmintonPlugin
     public static class PluginTexts
     {
         public static readonly Translation Badminton = CommonTexts.Create(
-            null,
             "Badminton",
             "Badminton"
         );
@@ -55,61 +54,51 @@ public partial class BadmintonPlugin
         );
         
         public static readonly Translation Name = CommonTexts.Create(
-            null,
             "Name",
             "Name"
         );
         
         public static readonly Translation NameMissing = CommonTexts.Create(
-            null,
             "Please enter a name.",
             "Bitte geben Sie einen Namen ein."
         );
         
         public static readonly Translation NameExists = CommonTexts.Create(
-            null,
             "This player already exists.",
             "Dieser Spieler existiert bereits."
         );
         
         public static readonly Translation RemovePlayerDescription = CommonTexts.Create(
-            null,
             "Deletes all combinations with this player.",
             "Löscht alle Kombinationen mit dem Spieler."
         );
         
         public static readonly Translation ReallyRemovePlayer = CommonTexts.Create(
-            null,
             "Do you want to remove this player?",
             "Möchten Sie diesen Spieler entfernen?"
         );
         
         public static readonly Translation ReallyCancelMatch = CommonTexts.Create(
-            null,
             "Do you want to cancel the match?",
             "Möchten Sie das Spiel abbrechen?"
         );
         
         public static readonly Translation ReallyGenerateCombinations = CommonTexts.Create(
-            null,
             "Do you want to re-generate all combinations?",
             "Möchten Sie alle Kombinationen neu generieren?"
         );
         
         public static readonly Translation NoPlayers = CommonTexts.Create(
-            null,
             "No players have been added yet.",
             "Es wurden noch keine Spieler hinzugefügt."
         );
         
         public static readonly Translation NoCombinations = CommonTexts.Create(
-            null,
             "No combinations are left.",
             "Alle Kombinationen wurden gespielt."
         );
         
         public static readonly Translation NotEnoughPlayers = CommonTexts.Create(
-            null,
             "Not enough players are active.",
             "Es gibt nicht genug aktive Spieler."
         );
@@ -157,13 +146,11 @@ public partial class BadmintonPlugin
         );
         
         public static readonly Translation MatchOver = CommonTexts.Create(
-            null,
             "Match over",
             "Spiel vorüber"
         );
         
         public static readonly Translation Winners = CommonTexts.Create(
-            null,
             "Winners",
             "Gewinner"
         );
@@ -175,7 +162,6 @@ public partial class BadmintonPlugin
         );
         
         public static readonly Translation Back = CommonTexts.Create(
-            null,
             "Back",
             "Zurück"
         );
@@ -187,7 +173,6 @@ public partial class BadmintonPlugin
         );
         
         public static readonly Translation CancelDescription = CommonTexts.Create(
-            null,
             "Puts the combination back on the list.",
             "Setzt die Kombination zurück in die Liste."
         );
@@ -211,7 +196,6 @@ public partial class BadmintonPlugin
         );
         
         public static readonly Translation UndoDescription = CommonTexts.Create(
-            null,
             "Reverses the last point.",
             "Entfernt den letzten Punkt."
         );
@@ -229,13 +213,11 @@ public partial class BadmintonPlugin
         );
         
         public static readonly Translation ActivatePlayerDescription = CommonTexts.Create(
-            null,
             "Shows all combinations with this player again.",
             "Zeigt alle Kombinationen mit dem Spieler wieder an."
         );
         
         public static readonly Translation DeactivatePlayerDescription = CommonTexts.Create(
-            null,
             "Hides all combinations with this player.",
             "Versteckt alle Kombinationen mit dem Spieler."
         );
@@ -247,13 +229,11 @@ public partial class BadmintonPlugin
         );
         
         public static readonly Translation RenamePlayerDescription = CommonTexts.Create(
-            null,
             "Changes the player's name.",
             "Gibt dem Spieler einen neuen Namen."
         );
         
         public static readonly Translation NoPointsYet = CommonTexts.Create(
-            null,
             "No points were scored yet.",
             "Es wurden noch keine Punkte eingetragen."
         );
@@ -271,7 +251,6 @@ public partial class BadmintonPlugin
         );
         
         public static readonly Translation InvertDescription = CommonTexts.Create(
-            null,
             "Corrects the positions in the team.",
             "Korrigiert die Positionen im Team."
         );
@@ -289,7 +268,6 @@ public partial class BadmintonPlugin
         );
         
         public static readonly Translation FastWinDescription = CommonTexts.Create(
-            null,
             "Marks the match as won without exact points.",
             "Markiert das Spiel ohne genaue Punkte als gewonnen."
         );
