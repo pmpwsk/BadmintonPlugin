@@ -8,36 +8,36 @@ public partial class BadmintonPlugin
 {
     private void AppendPlayers(BadmintonTournament tour, Page page)
         => page.Sections.Add(new Section(
-            Texts.Badminton,
+            PluginTexts.Badminton,
             [
                 new Subsection(
-                    Texts.Players,
+                    PluginTexts.Players,
                     Parsers.ConditionalIteration<AbstractElement>(
                         tour.Players.Length != 0,
                         tour.Players.OrderBy(player => player.Name).Select(player => new ServerActionButton(
                             new(player.Ignored ? "bi bi-ban" : "bi bi-person-fill", player.Name),
                             _ => OpenPlayerDialog(tour, page, player)
                         )),
-                        new Paragraph(Texts.NoPlayers)
+                        new Paragraph(PluginTexts.NoPlayers)
                     )
                 ),
                 new ServerForm(
-                    Texts.NewPlayer,
+                    PluginTexts.NewPlayer,
                     [
                         new TextBox(
                             "player-name",
-                            Texts.Name + "...",
+                            PluginTexts.Name + "...",
                             null,
                             TextBoxRole.Normal
                         ) { Autofocus = true }.Save(out var nameInput),
-                        new SubmitButton(Texts.Add)
+                        new SubmitButton(PluginTexts.Add)
                     ],
                     _ => AddPlayer(tour, nameInput)
                 ),
                 new ServerForm(
-                    Texts.Start,
+                    PluginTexts.Start,
                     [
-                        new SubmitButton(Texts.Continue)
+                        new SubmitButton(PluginTexts.Continue)
                     ],
                     _ => StartTournament(tour)
                 )
@@ -47,7 +47,7 @@ public partial class BadmintonPlugin
     private async Task AddPlayer(BadmintonTournament tour, TextBox nameInput)
     {
         if (nameInput.IsEmpty(out var name))
-            throw new ForcedActionError(Texts.NameMissing);
+            throw new ForcedActionError(PluginTexts.NameMissing);
         
         name = NormalizeName(name);
 
@@ -56,7 +56,7 @@ public partial class BadmintonPlugin
         if (tour.Players.Any(p => p.Name == name))
         {
             t.RequestCancellation();
-            throw new ForcedActionError(Texts.NameExists);
+            throw new ForcedActionError(PluginTexts.NameExists);
         }
         
         nameInput.SetValueForClient("");
@@ -72,25 +72,25 @@ public partial class BadmintonPlugin
             [
                 player.Ignored
                     ? new BigServerSubmitButton(
-                        Texts.Activate,
-                        Texts.ActivatePlayerDescription,
+                        PluginTexts.Activate,
+                        PluginTexts.ActivatePlayerDescription,
                         _ => TogglePlayerState(tour, player, false)
                     ) : new BigServerSubmitButton(
-                        Texts.Deactivate,
-                        Texts.DeactivatePlayerDescription,
+                        PluginTexts.Deactivate,
+                        PluginTexts.DeactivatePlayerDescription,
                         _ => TogglePlayerState(tour, player, true)
                     ),
                 new BigServerSubmitButton(
-                    Texts.Rename,
-                    Texts.RenamePlayerDescription,
+                    PluginTexts.Rename,
+                    PluginTexts.RenamePlayerDescription,
                     _ => OpenPlayerRenameDialog(tour, page, player)
                 ),
                 new BigServerSubmitButton(
-                    Texts.Delete,
-                    Texts.RemovePlayerDescription,
+                    PluginTexts.Delete,
+                    PluginTexts.RemovePlayerDescription,
                     _ => OpenPlayerDeletionDialog(tour, page, player)
                 ),
-                new SubmitButton(Texts.Back)
+                new SubmitButton(PluginTexts.Back)
             ],
             _ => DialogBuilder.Back(page)
         );
@@ -111,15 +111,15 @@ public partial class BadmintonPlugin
             [
                 new TextBox(
                     "player-name",
-                    Texts.Name + "...",
+                    PluginTexts.Name + "...",
                     player.Name,
                     TextBoxRole.Normal
                     ) { Autofocus = true }
                     .Save(out var nameInput),
                 new Row(
-                    new SubmitButton(Texts.Continue),
+                    new SubmitButton(PluginTexts.Continue),
                     new ServerSubmitButton(
-                        Texts.Back,
+                        PluginTexts.Back,
                         _ => DialogBuilder.Back(page)
                     )
                 )
@@ -130,7 +130,7 @@ public partial class BadmintonPlugin
     private async Task RenamePlayer(BadmintonTournament tour, BadmintonPlayer player, TextBox nameInput)
     {
         if (nameInput.IsEmpty(out var name))
-            throw new ForcedActionError(Texts.NameMissing);
+            throw new ForcedActionError(PluginTexts.NameMissing);
         
         name = NormalizeName(name);
         
@@ -142,7 +142,7 @@ public partial class BadmintonPlugin
         if (tour.Players.Any(p => p.Name == name))
         {
             t.RequestCancellation();
-            throw new ForcedActionError(Texts.NameExists);
+            throw new ForcedActionError(PluginTexts.NameExists);
         }
         
         nameInput.SetValueForClient("");
@@ -156,11 +156,11 @@ public partial class BadmintonPlugin
             page,
             player.Name,
             [
-                new Paragraph(Texts.ReallyRemovePlayer),
+                new Paragraph(PluginTexts.ReallyRemovePlayer),
                 new Row(
-                    new SubmitButton(Texts.Continue),
+                    new SubmitButton(PluginTexts.Continue),
                     new ServerSubmitButton(
-                        Texts.Back,
+                        PluginTexts.Back,
                         _ => DialogBuilder.Back(page)
                     )
                 )
@@ -180,7 +180,7 @@ public partial class BadmintonPlugin
     private async Task StartTournament(BadmintonTournament tour)
     {
         if (tour.Players.Count(player => !player.Ignored) < tour.TeamSize * 2)
-            throw new ForcedActionError(Texts.NotEnoughPlayers);
+            throw new ForcedActionError(PluginTexts.NotEnoughPlayers);
         
         await using var t = Tournaments.StartModifying(ref tour);
         

@@ -9,40 +9,40 @@ public partial class BadmintonPlugin
     {
         var number = 1;
         page.Sections.Add(new Section(
-            Texts.Badminton,
+            PluginTexts.Badminton,
             [
                 new Subsection(
                     null,
                     [
                         new ServerActionButton(
-                            Texts.Players,
+                            PluginTexts.Players,
                             _ => GoToPlayers(tour)
                         ),
                         new LinkButton(
-                            Texts.Results,
+                            PluginTexts.Results,
                             $"results?id={tour.Id}"
                         ),
                         new ServerActionButton(
-                            Texts.NewCombinations,
+                            PluginTexts.NewCombinations,
                             _ => OpenGenerateNewCombinationsDialog(tour, page)
                         )
                     ]
                 ),
                 new Subsection(
-                    Texts.Combinations,
+                    PluginTexts.Combinations,
                     Parsers.ConditionalIteration<AbstractElement>(
                         tour.Combinations.Any(comb => CombinationIsVisible(tour, comb)),
                         tour.Combinations.Where(comb => CombinationIsVisible(tour, comb))
                             .OrderBy(c => c.TeamA.Sum(p => tour.Players[p].Total) + c.TeamB.Sum(p => tour.Players[p].Total))
                             .Select(combination => new BigServerActionButton(
-                                $"{Texts.Combination} {number++}",
+                                $"{PluginTexts.Combination} {number++}",
                                 [
                                     "A: " + FormatTeam(tour, combination.TeamA),
                                     "B: " + FormatTeam(tour, combination.TeamB)
                                 ],
                                 _ => ChooseMatch(tour, combination)
                             )),
-                        new Paragraph(Texts.NoCombinations)
+                        new Paragraph(PluginTexts.NoCombinations)
                     )
                 )
             ]
@@ -66,13 +66,13 @@ public partial class BadmintonPlugin
     private void OpenGenerateNewCombinationsDialog(BadmintonTournament tour, Page page)
         => DialogBuilder.Open(
             page,
-            Texts.NewCombinations.ToString(),
+            PluginTexts.NewCombinations.ToString(),
             [
-                new Paragraph(Texts.ReallyGenerateCombinations),
+                new Paragraph(PluginTexts.ReallyGenerateCombinations),
                 new Row(
-                    new SubmitButton(Texts.Continue),
+                    new SubmitButton(PluginTexts.Continue),
                     new ServerSubmitButton(
-                        Texts.Back,
+                        PluginTexts.Back,
                         _ => DialogBuilder.Back(page)
                     )
                 )

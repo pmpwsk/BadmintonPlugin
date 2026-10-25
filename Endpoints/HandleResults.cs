@@ -11,7 +11,7 @@ public partial class BadmintonPlugin
         var id = req.Query.GetOrThrow("id");
         var tour = await Tournaments.GetByIdAsync(id);
         
-        var page = new Page(req, true, Texts.Badminton);
+        var page = new Page(req, true, PluginTexts.Badminton);
         await page.ReloadOnChangeAsync(tour);
         
         AppendResults(tour, page);

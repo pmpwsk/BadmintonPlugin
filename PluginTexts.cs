@@ -5,7 +5,7 @@ namespace uwap.WebFramework.Plugins;
 
 public partial class BadmintonPlugin
 {
-    public static class Texts
+    public static class PluginTexts
     {
         public static readonly CustomText Badminton = new(
             null,
