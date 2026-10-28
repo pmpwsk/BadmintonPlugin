@@ -1,3 +1,4 @@
+using uwap.WebFramework.Localization;
 using uwap.WebFramework.Responses.Actions;
 using uwap.WebFramework.Responses.Base;
 using uwap.WebFramework.Responses.DefaultUI;
@@ -26,18 +27,18 @@ public partial class BadmintonPlugin
                     [
                         new TextBox(
                             "player-name",
-                            PluginTexts.Name + "...",
+                            PluginTexts.NamePlaceholder,
                             null,
                             TextBoxRole.Normal
                         ) { Autofocus = true }.Save(out var nameInput),
-                        new SubmitButton(PluginTexts.Add)
+                        new SubmitButton(CommonTexts.Add)
                     ],
                     _ => AddPlayer(tour, nameInput)
                 ),
                 new ServerForm(
                     PluginTexts.Start,
                     [
-                        new SubmitButton(PluginTexts.Continue)
+                        new ContinueButton()
                     ],
                     _ => StartTournament(tour)
                 )
@@ -47,7 +48,7 @@ public partial class BadmintonPlugin
     private async Task AddPlayer(BadmintonTournament tour, TextBox nameInput)
     {
         if (nameInput.IsEmpty(out var name))
-            throw new ForcedActionError(PluginTexts.NameMissing);
+            throw new ForcedActionError(CommonTexts.EmptyFields);
         
         name = NormalizeName(name);
 
@@ -81,16 +82,16 @@ public partial class BadmintonPlugin
                         _ => TogglePlayerState(tour, player, true)
                     ),
                 new BigServerSubmitButton(
-                    PluginTexts.Rename,
+                    CommonTexts.Rename,
                     PluginTexts.RenamePlayerDescription,
                     _ => OpenPlayerRenameDialog(tour, page, player)
                 ),
                 new BigServerSubmitButton(
-                    PluginTexts.Delete,
+                    CommonTexts.Delete,
                     PluginTexts.RemovePlayerDescription,
                     _ => OpenPlayerDeletionDialog(tour, page, player)
                 ),
-                new SubmitButton(PluginTexts.Back)
+                new DialogBackButton(page)
             ],
             _ => DialogBuilder.Back(page)
         );
@@ -111,17 +112,14 @@ public partial class BadmintonPlugin
             [
                 new TextBox(
                     "player-name",
-                    PluginTexts.Name + "...",
+                    PluginTexts.NamePlaceholder,
                     player.Name,
                     TextBoxRole.Normal
                     ) { Autofocus = true }
                     .Save(out var nameInput),
                 new Row(
-                    new SubmitButton(PluginTexts.Continue),
-                    new ServerSubmitButton(
-                        PluginTexts.Back,
-                        _ => DialogBuilder.Back(page)
-                    )
+                    new ContinueButton(),
+                    new DialogBackButton(page)
                 )
             ],
             _ => RenamePlayer(tour, player, nameInput)
@@ -130,12 +128,12 @@ public partial class BadmintonPlugin
     private async Task RenamePlayer(BadmintonTournament tour, BadmintonPlayer player, TextBox nameInput)
     {
         if (nameInput.IsEmpty(out var name))
-            throw new ForcedActionError(PluginTexts.NameMissing);
+            throw new ForcedActionError(CommonTexts.EmptyFields);
         
         name = NormalizeName(name);
         
         if (player.Name == name)
-            return;
+            throw new ForcedActionError(PluginTexts.NameSame);
 
         await using var t = Tournaments.StartModifying(ref tour);
         
@@ -158,11 +156,8 @@ public partial class BadmintonPlugin
             [
                 new Paragraph(PluginTexts.ReallyRemovePlayer),
                 new Row(
-                    new SubmitButton(PluginTexts.Continue),
-                    new ServerSubmitButton(
-                        PluginTexts.Back,
-                        _ => DialogBuilder.Back(page)
-                    )
+                    new ContinueButton(),
+                    new DialogBackButton(page)
                 )
             ],
             _ => DeletePlayer(tour, player)

@@ -1,3 +1,4 @@
+using uwap.WebFramework.Localization;
 using uwap.WebFramework.Responses.Actions;
 using uwap.WebFramework.Responses.DefaultUI;
 
@@ -36,7 +37,7 @@ public partial class BadmintonPlugin
     private void OpenMatchDialog(BadmintonTournament tour, Page page)
         => DialogBuilder.Open(
             page,
-            PluginTexts.Match.ToString(),
+            PluginTexts.Match,
             [
                 new BigServerSubmitButton(
                     PluginTexts.Undo,
@@ -44,7 +45,7 @@ public partial class BadmintonPlugin
                     _ => UndoLastPoint(tour)
                 ),
                 new BigServerSubmitButton(
-                    PluginTexts.Cancel,
+                    CommonTexts.Cancel,
                     PluginTexts.CancelDescription,
                     _ => CancelMatchDialog(tour, page)
                 ),
@@ -59,7 +60,7 @@ public partial class BadmintonPlugin
                     PluginTexts.FastWinDescription,
                     _ => FinishMatchDialog(tour, page, true, true)
                 ),
-                new SubmitButton(PluginTexts.Back)
+                new DialogBackButton(page)
             ],
             _ => DialogBuilder.Back(page)
         );
@@ -124,7 +125,7 @@ public partial class BadmintonPlugin
         var wonLast = lastResult == isB;
         var team = isB ? match.Combination.TeamB : match.Combination.TeamA;
         return new(
-            $"Team {(isB ? "B" : "A")} ({points})",
+            $"{(isB ? PluginTexts.TeamB : PluginTexts.TeamA)} ({points})",
             PlayerLines(tour, isB, points, wonLast, reversed, team),
             _ => AddPoint(tour, page, isB)
         )
@@ -199,15 +200,12 @@ public partial class BadmintonPlugin
     private void CancelMatchDialog(BadmintonTournament tour, Page page)
         => DialogBuilder.Open(
             page,
-            PluginTexts.Match.ToString(),
+            PluginTexts.Match,
             [
                 new Paragraph(PluginTexts.ReallyCancelMatch),
                 new Row(
-                    new SubmitButton(PluginTexts.Continue),
-                    new ServerSubmitButton(
-                        PluginTexts.Back,
-                        _ => DialogBuilder.Back(page)
-                    )
+                    new ContinueButton(),
+                    new DialogBackButton(page)
                 )
             ],
             _ => CancelMatch(tour)
@@ -240,12 +238,10 @@ public partial class BadmintonPlugin
             [
                 new Paragraph($"{PluginTexts.Winners}: {FormatTeam(tour, isB ? tour.Matches.Last().Combination.TeamB : tour.Matches.Last().Combination.TeamA)}"),
                 new Row(
-                    new SubmitButton(PluginTexts.Continue),
+                    new ContinueButton(),
                     synthetic
-                        ? new ServerSubmitButton(
-                            PluginTexts.Back,
-                            _ => DialogBuilder.Back(page)
-                        ) : new ServerSubmitButton(
+                        ? new DialogBackButton(page) 
+                        : new ServerSubmitButton(
                             PluginTexts.Undo,
                             _ =>
                             {

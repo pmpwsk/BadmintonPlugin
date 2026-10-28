@@ -66,15 +66,12 @@ public partial class BadmintonPlugin
     private void OpenGenerateNewCombinationsDialog(BadmintonTournament tour, Page page)
         => DialogBuilder.Open(
             page,
-            PluginTexts.NewCombinations.ToString(),
+            PluginTexts.NewCombinations,
             [
                 new Paragraph(PluginTexts.ReallyGenerateCombinations),
                 new Row(
-                    new SubmitButton(PluginTexts.Continue),
-                    new ServerSubmitButton(
-                        PluginTexts.Back,
-                        _ => DialogBuilder.Back(page)
-                    )
+                    new ContinueButton(),
+                    new DialogBackButton(page)
                 )
             ],
             _ => GenerateNewCombinations(tour)

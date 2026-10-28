@@ -1,3 +1,4 @@
+using uwap.WebFramework.Localization;
 using uwap.WebFramework.Responses.DefaultUI;
 
 namespace uwap.WebFramework.Plugins;
@@ -17,7 +18,7 @@ public partial class BadmintonPlugin
                             .ThenBy(player => player.Name)
                             .Select(player => new Paragraph($"{player.Name}: {player.Wins}/{player.Wins + player.Losses} ({Math.Round(player.Ratio * 100, 1, MidpointRounding.AwayFromZero)}%)")),
                         new LinkButton(
-                            PluginTexts.Back,
+                            CommonTexts.Back,
                             $"tournament?id={tour.Id}"
                         )
                     ]
