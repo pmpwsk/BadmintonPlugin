@@ -60,7 +60,7 @@ public partial class BadmintonPlugin
             throw new ForcedActionError(PluginTexts.NameExists);
         }
         
-        nameInput.SetValueForClient("");
+        await nameInput.SetValueForClientAsync("");
         tour.Players = [..tour.Players, new BadmintonPlayer(name, false, 0, 0)];
         Array.Sort(tour.Players);
         GenerateCombinationsInTransaction(tour, true);
@@ -143,7 +143,7 @@ public partial class BadmintonPlugin
             throw new ForcedActionError(PluginTexts.NameExists);
         }
         
-        nameInput.SetValueForClient("");
+        await nameInput.SetValueForClientAsync("");
         var transactionPlayer = tour.Players.FirstOrDefault(p => p == player);
         if (transactionPlayer != null)
             transactionPlayer.Name = name;

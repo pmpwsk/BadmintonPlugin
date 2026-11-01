@@ -35,7 +35,7 @@ public partial class BadmintonPlugin
             async _ =>
             {
                 var value = await Tournaments.CreateAsync(teamSize, rounds);
-                page.Navigate("tournament?id=" + value.Id);
+                await page.NavigateAsync("tournament?id=" + value.Id);
             }
         );
 }
