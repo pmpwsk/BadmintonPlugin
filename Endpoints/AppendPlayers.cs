@@ -48,10 +48,7 @@ public partial class BadmintonPlugin
     
     private async Task AddPlayer(BadmintonTournament tour, TextBox nameInput)
     {
-        if (nameInput.IsEmpty(out var name))
-            throw new ForcedActionError(CommonTexts.EmptyFields);
-        
-        name = NormalizeName(name);
+        var name = NormalizeName(nameInput.Value);
 
         await using var t = Tournaments.StartModifying(ref tour);
         
@@ -128,10 +125,7 @@ public partial class BadmintonPlugin
     
     private async Task RenamePlayer(BadmintonTournament tour, BadmintonPlayer player, TextBox nameInput)
     {
-        if (nameInput.IsEmpty(out var name))
-            throw new ForcedActionError(CommonTexts.EmptyFields);
-        
-        name = NormalizeName(name);
+        var name = NormalizeName(nameInput.Value);
         
         if (player.Name == name)
             throw new ForcedActionError(PluginTexts.NameSame);
@@ -192,5 +186,5 @@ public partial class BadmintonPlugin
     }
     
     private static string NormalizeName(string name)
-        => string.Join(' ', name.Split(' ').Select(n => n[..1].ToUpper() + n[1..].ToLower()));
+        => string.Join(' ', name.Split(' ').Select(n => n == "" ? "" : n[..1].ToUpper() + n[1..].ToLower()));
 }
