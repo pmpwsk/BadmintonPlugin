@@ -29,8 +29,9 @@ public partial class BadmintonPlugin
                             "player-name",
                             PluginTexts.NamePlaceholder,
                             null,
-                            TextBoxRole.Normal
-                        ) { Autofocus = true }.Save(out var nameInput),
+                            TextBoxRole.Normal,
+                            true
+                        ).Save(out var nameInput),
                         new SubmitButton(CommonTexts.Add)
                     ],
                     _ => AddPlayer(tour, nameInput)
@@ -114,9 +115,9 @@ public partial class BadmintonPlugin
                     "player-name",
                     PluginTexts.NamePlaceholder,
                     player.Name,
-                    TextBoxRole.Normal
-                    ) { Autofocus = true }
-                    .Save(out var nameInput),
+                    TextBoxRole.Normal,
+                    true
+                ).Save(out var nameInput),
                 new Row(
                     new ContinueButton(),
                     new DialogBackButton(page)
