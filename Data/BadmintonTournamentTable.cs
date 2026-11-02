@@ -8,12 +8,6 @@ namespace uwap.WebFramework.Plugins;
 public class BadmintonTournamentTable(string name, List<ClusterNode> clusterNodes)
     : Table<BadmintonTournament>(name, clusterNodes)
 {
-    public override AbstractSerializer Serializer
-        => Serializers.Json;
-
-    public override ulong TypeIteration
-        => 1;
-
     public override int MinimumIdLength
         => 8;
 
