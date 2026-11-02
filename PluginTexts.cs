@@ -55,11 +55,6 @@ public partial class BadmintonPlugin
             "Neuer Spieler"
         );
         
-        public static readonly Translation NamePlaceholder = Create(
-            "Enter a name...",
-            "Namen eingeben..."
-        );
-        
         public static readonly Translation NameExists = Create(
             "This player already exists.",
             "Dieser Spieler existiert bereits."

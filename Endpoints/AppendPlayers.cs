@@ -27,7 +27,7 @@ public partial class BadmintonPlugin
                     [
                         new TextBox(
                             "player-name",
-                            PluginTexts.NamePlaceholder,
+                            CommonTexts.NamePlaceholder,
                             null,
                             TextBoxRole.Normal,
                             true
@@ -110,7 +110,7 @@ public partial class BadmintonPlugin
             [
                 new TextBox(
                     "player-name",
-                    PluginTexts.NamePlaceholder,
+                    CommonTexts.NamePlaceholder,
                     player.Name,
                     TextBoxRole.Normal,
                     true
