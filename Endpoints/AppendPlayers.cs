@@ -91,7 +91,7 @@ public partial class BadmintonPlugin
                 ),
                 new DialogBackButton(page)
             ],
-            _ => DialogBuilder.Back(page)
+            _ => {}
         );
     
     private async Task TogglePlayerState(BadmintonTournament tour, BadmintonPlayer player, bool ignored)

@@ -62,7 +62,7 @@ public partial class BadmintonPlugin
                 ),
                 new DialogBackButton(page)
             ],
-            _ => DialogBuilder.Back(page)
+            _ => {}
         );
     
     private IEnumerable<BigServerSubmitButton> InvertButtons(BadmintonTournament tour)
